@@ -1,4 +1,36 @@
-﻿--الموظفين غير الراضين عن العمل
+﻿--Merge (F&L Name) — دمج الاسم الأول والأخير
+SELECT 
+    EmployeeID,
+    FirstName + ' ' + LastName AS FullName
+FROM 
+    Employee;
+ ------
+ ---بيانات تقييم الأداء لكل موظف
+SELECT 
+    p.EmployeeID,
+    e.FirstName + ' ' + e.LastName AS FullName,
+    p.ManagerRating,
+    p.ReviewDate
+FROM 
+   [Performance Rating] p
+JOIN 
+    Employee e 
+ON 
+    p.EmployeeID = e.EmployeeID;
+----
+--مستويات تقييم الاداء للموظف
+SELECT 
+    p.EmployeeID,
+    p.ManagerRating,
+    r.RatingLevel
+FROM 
+    [Performance Rating] p
+JOIN 
+    [Rating Level] r 
+ON 
+    p.ManagerRating = r.RatingID;
+-----
+ --الموظفين غير الراضين عن العمل
 ------
 SELECT 
     e.EmployeeID, 
@@ -63,3 +95,23 @@ SELECT
     (SUM(CAST(TrainingOpportunitiesTaken AS FLOAT)) * 100.0 / NULLIF(SUM(CAST(TrainingOpportunitiesWithinYear AS FLOAT)), 0)) AS UtilizationRate
 FROM [Performance Rating];
 -------
+--Joins شاملة بين كل الجداول
+SELECT 
+    e.EmployeeID,
+    e.FirstName + ' ' + e.LastName AS FullName,
+    dEdu.EducationLevel,
+    pr.ManagerRating,
+    r.RatingLevel,
+    pr.JobSatisfaction,
+    s.SatisfactionLevel,
+    pr.ReviewDate
+FROM 
+    Employee e
+JOIN 
+    [Educationa Level] dEdu ON e.Education = dEdu.EducationLevelID
+JOIN 
+    [Performance Rating] pr ON e.EmployeeID = pr.EmployeeID
+JOIN 
+    [Rating Level] r ON pr.ManagerRating = r.RatingID
+JOIN 
+    [satisfied Level] s ON pr.jobSatisfaction = s.SatisfactionID;
